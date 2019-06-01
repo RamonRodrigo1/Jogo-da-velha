@@ -9,9 +9,8 @@ public class JogoDaVelha {
 
     public static void main(String[] args) {
         
-       Behavior behavior = new Behavior();
+        Game game = new Game();
        
-       behavior.game();
     }
     
 }
