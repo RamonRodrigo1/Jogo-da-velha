@@ -1,119 +1,115 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package jogo.da.velha;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
-/**
- *
- * @author Usúario
- */
 public class Game {
     
     private boolean run;
     private boolean option;
-    private boolean turn;
     private String choice;
     private int[][] matrix;
-    private int row;
-    private int col;
 
-    public Game() {
+    public boolean isRun() {
+        return run;
+    }
+
+    public void setRun(boolean run) {
+        this.run = run;
+    }
+
+    public boolean isOption() {
+        return option;
+    }
+
+    public void setOption(boolean option) {
+        this.option = option;
+    }
+    
+    public String getChoice() {
+        return choice;
+    }
+
+    public void setChoice(String choice) {
+        this.choice = choice;
+    }
+
+    public int[][] getMatrix() {
+        return matrix;
+    }
+
+    public void setMatrix(int[][] matrix) {
+        this.matrix = matrix;
+    }
+
+    public Game(int size) {
         
-        option = true;
-        run = true;
-        turn = true;
-        matrix = new int[3][3];
+        this.setMatrix(new int[size][size]);
+        
+    }
+    
+    
+
+    public void Run() {
+        
+        this.setOption(true);
+        this.setRun(true);
         
         Scanner scanner = new Scanner(System.in);
-        GameBoard gameBoard = new GameBoard(matrix);
+        GameBoard gameBoard = new GameBoard(this.getMatrix());
         Play play1 = new Play("Jogador 1");
         Play play2 = new Play("Jogador 2");
-        Verification verification = new Verification(matrix, play1, play2);
+        SelectPosition selecPosition = new SelectPosition(this.getMatrix(), play1, play2);
+        Verification verification = new Verification(this.getMatrix(), play1, play2);
                 
         System.out.println("Bem-vindo ao Jogo da velha!");
         
-        while(option){
-            
-            System.out.println("DICA: Posição de tabuleiro.\n" +
+        System.out.println("DICA: Posição de tabuleiro.\n" +
                                 "   C O L U M A\n" +
                                 "L     X| | \n" +
                                 "I    -------\n" +
                                 "N      |O|\n" +
                                 "H    -------\n" +
                                 "A      | |X");
+        
+        while(this.isOption()){
 
             System.out.println("Jogador 1 escolha X ou O para começar.(Digite somenta x ou o)");
 
-            choice = scanner.next();
+            this.setChoice(scanner.next()); 
 
-            if("X".equals(choice) || "x".equals(choice)){
+            if("X".equals(this.getChoice()) || "x".equals(this.getChoice())){
                 
                 play1.setChoice(1);
                 play2.setChoice(-1);
                 
-                option = false;
+                this.setOption(false);
 
             }
-            if("O".equals(choice) || "o".equals(choice)){
+            if("O".equals(this.getChoice()) || "o".equals(this.getChoice())){
 
                 play1.setChoice(-1);
                 play2.setChoice(1);
-                option = false;
+                
+                this.setOption(false);
 
             }
             
         }
-        while(run){
+        while(this.isRun()){
             
             gameBoard.Show();
             
-            if(turn){
-
-                System.out.println(play1.getNome()+" escolha sua posição.");
-
-                System.out.println("Coluna:");
-                col = scanner.nextInt() - 1;
-
-                System.out.println("Linha:");
-                row = scanner.nextInt() - 1;
-            }else{
-
-                System.out.println(play2.getNome()+" escolha sua posição.");
-
-                System.out.println("Coluna:");
-                col = scanner.nextInt() - 1;
-
-                System.out.println("Linha:");
-                row = scanner.nextInt() - 1;
-
-            }
+            selecPosition.Turn();
             
-            if(turn){
-
-                matrix[row][col] = play1.getChoice();
-                turn = false;
-
-            }else{
-
-                matrix[row][col] = play2.getChoice();
-                turn = true;
-
-            }
-            //System.out.println(Arrays.deepToString(matrix));
             verification.Win();
-            //System.out.println(verification.Winner());
             
             if(verification.WinValidation()){
                 
                 gameBoard.Show();
                 
                 System.out.println("O vencedor é o "+ verification.Winner() +":");
-                run = false;
+                this.setRun(false);
             }
             
         } 

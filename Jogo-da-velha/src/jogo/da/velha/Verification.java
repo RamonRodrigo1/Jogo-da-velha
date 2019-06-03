@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package jogo.da.velha;
 
-/**
- *
- * @author Usúario
- */
-public class Verification {
+public final class Verification {
     
     private int[][] matrix;
     private int add;
@@ -17,16 +9,6 @@ public class Verification {
     private Play play2;
     private String nameWinner;
     private boolean validation;
-
-    public Verification(int[][] matrix, Play play1, Play play2) {
-        
-        this.matrix = matrix;
-        this.setPlay1(play1);
-        this.setPlay2(play2);
-        
-    }
-    
-    
 
     public int[][] getMatrix() {
         return matrix;
@@ -76,13 +58,20 @@ public class Verification {
         this.validation = validation;
     }
     
-    
+    public Verification(int[][] matrix, Play play1, Play play2) {
+        
+        this.matrix = matrix;
+        this.setPlay1(play1);
+        this.setPlay2(play2);
+        
+    }
     
     public void Win(){
         
         this.setValidation(false);
         this.VerificationHorizontal();
         this.VerificationVertical();
+        this.VerificationTransversal();
         
     }
     
@@ -156,6 +145,43 @@ public class Verification {
             
         }
         
+    }
+    
+    private void VerificationTransversal(){
+        
+        for(int i = 0; i < 2; i++){
+            
+            this.setAdd(0);
+
+            for(int j = 0; j < this.getMatrix().length; j++){
+                
+                if(0 == i){
+                    
+                    this.add += this.getMatrix()[j][j];
+                    
+                } else {
+                    
+                    this.add += this.getMatrix()[j][(this.getMatrix().length - 1) - j];
+                    
+                }
+                
+            }
+            
+            if(this.add == this.getPlay1().getChoice() * this.getMatrix()[0].length){
+                
+                this.setNameWinner(this.getPlay1().getNome());
+                this.setValidation(true);
+                
+            }
+            if(this.add == this.getPlay2().getChoice() * this.getMatrix()[0].length){
+                
+                this.setNameWinner(this.getPlay2().getNome());
+                this.setValidation(true);
+                   
+            }
+            
+        }
+    
     }
     
 }
